@@ -104,15 +104,21 @@ button:hover {
 }
 
 .fireworks {
-    display: none;
+    display: none; /* Versteckt das Feuerwerk am Anfang */
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
-    font-size: 3em;
-    line-height: 100vh;
-    color: white;
+    width: 90%;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    animation: appear 1s ease forwards;
+}
+
+.fireworks.show {
+    display: block; /* Jetzt wird es nur angezeigt, wenn die Klasse 'show' dazukommt */
 }
