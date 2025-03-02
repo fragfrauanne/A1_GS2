@@ -91,18 +91,6 @@ button {
     outline: none;
 }
 
-button:hover {
-    text-decoration: underline;
-}
-
-.correctBtn {
-    color: #4CAF50; /* Grün */
-}
-
-.wrongBtn {
-    color: #FF4136; /* Rot */
-}
-
 .fireworks {
     display: none; /* Versteckt das Feuerwerk am Anfang */
     position: fixed;
