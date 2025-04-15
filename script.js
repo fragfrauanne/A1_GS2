@@ -19,7 +19,6 @@ const tasks = [
     { question: "Ich sprech___ Deutsch.", answer: "spreche" }
 ];
 
-let wrongCards = [];
 const container = document.getElementById("cardsContainer");
 const fireworks = document.getElementById("fireworks");
 
@@ -29,7 +28,6 @@ function shuffle(array) {
 
 function createCards(tasks) {
     container.innerHTML = "";
-    wrongCards = [];
 
     shuffle(tasks).forEach(task => {
         const card = document.createElement("div");
@@ -48,34 +46,53 @@ function createCards(tasks) {
             </div>
         `;
 
+        // Klicken auf die Karte dreht sie um, wenn sie noch nicht umgedreht ist
         card.addEventListener("click", () => {
             if (!card.classList.contains("flipped")) {
                 card.classList.add("flipped");
             }
         });
 
-        card.querySelector(".correctBtn").onclick = () => {
+        // Beim "Richtig"-Button entfernen wir die Karte
+        card.querySelector(".correctBtn").onclick = (e) => {
+            e.stopPropagation(); // Verhindert, dass das Klicken auf den Button auch das Klicken auf die Karte auslöst
             card.remove();
             checkEnd();
         };
 
-        card.querySelector(".wrongBtn").onclick = () => {
-            wrongCards.push(task);
-            setTimeout(() => card.classList.remove("flipped"), 1000);
+        // Beim "Falsch"-Button soll die Karte nach 1 Sekunde wieder umgedreht und neu positioniert werden
+        card.querySelector(".wrongBtn").onclick = (e) => {
+            e.stopPropagation();
+            setTimeout(() => {
+                card.classList.remove("flipped");
+                repositionCard(card);
+            }, 1000);
         };
 
         container.appendChild(card);
     });
 }
 
+// Diese Funktion entfernt die Karte aus dem Container und fügt sie an einer zufälligen Position wieder ein.
+function repositionCard(card) {
+    // Zuerst entfernen wir die Karte aus dem Container
+    container.removeChild(card);
+    // Bestimme die Anzahl der aktuell vorhandenen Karten
+    const children = container.children;
+    // Wähle einen zufälligen Index zwischen 0 und der Anzahl der vorhandenen Karten (inklusive Möglichkeit, am Ende einzufügen)
+    const randomIndex = Math.floor(Math.random() * (children.length + 1));
+    if (randomIndex === children.length) {
+        container.appendChild(card);
+    } else {
+        container.insertBefore(card, children[randomIndex]);
+    }
+}
+
+// Überprüft, ob alle Karten entfernt wurden und das Feuerwerk angezeigt werden soll.
 function checkEnd() {
     if (container.children.length === 0) {
-        if (wrongCards.length === 0) {
-            fireworks.style.display = "block";
-            setTimeout(() => fireworks.style.display = "none", 4000);
-        } else {
-            createCards(wrongCards);
-        }
+        fireworks.style.display = "block";
+        setTimeout(() => { fireworks.style.display = "none"; }, 4000);
     }
 }
 
